@@ -1,28 +1,26 @@
-import "dvd" -- DEMO
-local dvd = dvd(1, -1) -- DEMO
+import "CoreLibs/object"
+import "CoreLibs/graphics"
+import "CoreLibs/sprites"
 
-local gfx <const> = playdate.graphics
-local font = gfx.font.new('font/Mini Sans 2X') -- DEMO
+local pd <const> = playdate
+local gfx <const> = pd.graphics
 
-local function loadGame()
-	playdate.display.setRefreshRate(50) -- Sets framerate to 50 fps
-	math.randomseed(playdate.getSecondsSinceEpoch()) -- seed for math.random
-	gfx.setFont(font) -- DEMO
+import "circle"
+import "spike"
+
+local function initialize()
+    local circleSprite = Circle(200, 120, 20)
+    circleSprite:add()
+
+    local circleSprite2 = Circle(200, 220, 10)
+    circleSprite2:add()
+
+    local spike = Spike(300, 120)
+    spike:add()
 end
 
-local function updateGame()
-	dvd:update() -- DEMO
-end
+initialize()
 
-local function drawGame()
-	gfx.clear() -- Clears the screen
-	dvd:draw() -- DEMO
-end
-
-loadGame()
-
-function playdate.update()
-	updateGame()
-	drawGame()
-	playdate.drawFPS(0,0) -- FPS widget
+function pd.update()
+    gfx.sprite.update()
 end
