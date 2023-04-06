@@ -1,9 +1,19 @@
 {
-	// See https://go.microsoft.com/fwlink/?LinkId=733558
-	// for the documentation about the tasks.json format
-	"version": "2.0.0",
-	"tasks": [
-	  {
+  // See https://go.microsoft.com/fwlink/?LinkId=733558
+  // for the documentation about the tasks.json format
+  "version": "2.0.0",
+  "tasks": [
+	{
+		"label": "build project (pdc)",
+		"type": "shell",
+		"command": "pdc source test.pdx; open test.pdx",
+		"problemMatcher": [],
+		"group": {
+			"kind": "build",
+			"isDefault": true
+		}
+	},
+	{
 		"label": "Invoke Build and Run script",
 		"type": "shell",
 		"command": "&",
@@ -17,12 +27,12 @@
 			"'${workspaceFolderBasename}'"
 		],
 		"presentation": {
-		  "showReuseMessage": false,
-		  "reveal": "always",
-		  "panel": "shared"
+			"showReuseMessage": false,
+			"reveal": "always",
+			"panel": "shared"
 		}
-	  },
-	  {
+	},
+	{
 		"label": "Invoke Run script",
 		"type": "shell",
 		"command": "&",
@@ -37,41 +47,41 @@
 			"-dontbuild"
 		],
 		"presentation": {
-		  "showReuseMessage": false,
-		  "reveal": "always",
-		  "panel": "shared"
+			"showReuseMessage": false,
+			"reveal": "always",
+			"panel": "shared"
 		}
-	  },
-	  {
+	},
+	{
 		"label": "Build and Run (Simulator)",
-		"dependsOn": ["Invoke Build and Run script"],
+		"dependsOn": [
+			"Invoke Build and Run script"
+		],
 		"dependsOrder": "sequence",
 		"presentation": {
-		  "showReuseMessage": false,
-		  "reveal": "always",
-		  "panel": "shared"
+			"showReuseMessage": false,
+			"reveal": "always",
+			"panel": "shared"
 		},
 		"problemMatcher": [],
-		"group": {
-		  "kind": "build",
-		  "isDefault": true
-		}
-	  },
-	  {
+		"group": "build"
+	},
+	{
 		"label": "Run (Simulator)",
-		"dependsOn": ["Invoke Run script"],
+		"dependsOn": [
+			"Invoke Run script"
+		],
 		"dependsOrder": "sequence",
 		"presentation": {
-		  "showReuseMessage": false,
-		  "reveal": "always",
-		  "panel": "shared"
+			"showReuseMessage": false,
+			"reveal": "always",
+			"panel": "shared"
 		},
 		"problemMatcher": [],
 		"group": {
-		  "kind": "test",
-		  "isDefault": true
+			"kind": "test",
+			"isDefault": true
 		}
-	  }
-	]
-  }
-  
+	}
+]
+}
