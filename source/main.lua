@@ -4,12 +4,13 @@ import "CoreLibs/sprites"
 import "CoreLibs/timer"
 
 import "knight"
+import "giant"
 
 local pd <const> = playdate
 local gfx <const> = pd.graphics
 
 local function initialize()
-	local playerInstance = Knight(200, 200)
+	local playerInstance = Giant(200, 200)
 	playerInstance:add()
 end
 
