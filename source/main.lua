@@ -1,28 +1,62 @@
-import "dvd" -- DEMO
-local dvd = dvd(1, -1) -- DEMO
+import "CoreLibs/object"
+import "CoreLibs/graphics"
+import "CoreLibs/sprites"
+import "CoreLibs/timer"
 
-local gfx <const> = playdate.graphics
-local font = gfx.font.new('font/Mini Sans 2X') -- DEMO
+import "arrow"
 
-local function loadGame()
-	playdate.display.setRefreshRate(50) -- Sets framerate to 50 fps
-	math.randomseed(playdate.getSecondsSinceEpoch()) -- seed for math.random
-	gfx.setFont(font) -- DEMO
+local pd <const> = playdate
+local gfx <const> = pd.graphics
+
+local wallSprite = nil
+
+local arrowResponses = { "freeze", "slide", "bounce", "overlap" }
+local arrowResponseIndex = 1
+arrowCollisionResponse = arrowResponses[arrowResponseIndex]
+
+local labelSprite = nil
+local labelImage = nil
+
+local function initialize()
+	math.randomseed(playdate.getSecondsSinceEpoch())
+
+	local wallImage = gfx.image.new("images/wall")
+	wallSprite = gfx.sprite.new(wallImage)
+	wallSprite:setCollideRect(0, 0, wallSprite:getSize())
+	wallSprite:moveTo(300, 120)
+	wallSprite:add()
+
+	labelSprite = gfx.sprite.new()
+	labelImage = gfx.image.new(200, 20)
+	gfx.pushContext(labelImage)
+		gfx.drawText("Collision Type: " .. arrowCollisionResponse, 0, 0)
+	gfx.popContext()
+	labelSprite:setImage(labelImage)
+	labelSprite:add()
+	labelSprite:setCenter(0, 0)
+	labelSprite:moveTo(10, 10)
 end
 
-local function updateGame()
-	dvd:update() -- DEMO
-end
+initialize()
 
-local function drawGame()
-	gfx.clear() -- Clears the screen
-	dvd:draw() -- DEMO
-end
+function pd.update()
+	-- Press B to change collision type
+	if pd.buttonJustPressed(pd.kButtonB) then
+		arrowResponseIndex = arrowResponseIndex + 1 - math.floor(arrowResponseIndex / #arrowResponses) * #arrowResponses
+		arrowCollisionResponse = arrowResponses[arrowResponseIndex]
+		labelImage:clear(gfx.kColorWhite)
+		gfx.pushContext(labelImage)
+			gfx.drawText("Collision Type: " .. arrowCollisionResponse, 0, 0)
+		gfx.popContext()
+	end
 
-loadGame()
+	-- Press A to shoot arrows
+	if pd.buttonIsPressed(pd.kButtonA) then
+		local newArrow = Arrow(20, 120, 10, 0.1)
+		newArrow:add()
+	end
 
-function playdate.update()
-	updateGame()
-	drawGame()
-	playdate.drawFPS(0,0) -- FPS widget
+	gfx.sprite.update()
+	pd.timer.updateTimers()
+	pd.drawFPS(380, 10)
 end
