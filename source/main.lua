@@ -1,28 +1,59 @@
-import "dvd" -- DEMO
-local dvd = dvd(1, -1) -- DEMO
+import "CoreLibs/object"
+import "CoreLibs/graphics"
+import "CoreLibs/sprites"
+import "CoreLibs/timer"
 
-local gfx <const> = playdate.graphics
-local font = gfx.font.new('font/Mini Sans 2X') -- DEMO
+local pd <const> = playdate
+local gfx <const> = pd.graphics
 
-local function loadGame()
-	playdate.display.setRefreshRate(50) -- Sets framerate to 50 fps
-	math.randomseed(playdate.getSecondsSinceEpoch()) -- seed for math.random
-	gfx.setFont(font) -- DEMO
+import "Ball"
+
+-- local ballSpriteCubic = Ball(0, 100)
+-- local ballSpriteLinear = Ball(0, 140)
+
+local function initialize()
 end
 
-local function updateGame()
-	dvd:update() -- DEMO
-end
+initialize()
 
-local function drawGame()
-	gfx.clear() -- Clears the screen
-	dvd:draw() -- DEMO
-end
+local myAnimator = gfx.animator.new(2000, 0, 400)
+myAnimator.repeatCount = 3
 
-loadGame()
+local cubicAnimator = gfx.animator.new(2000, 0, 400, pd.easingFunctions.inOutCubic)
+local linearAnimator = gfx.animator.new(2000, 0, 400)
 
-function playdate.update()
-	updateGame()
-	drawGame()
-	playdate.drawFPS(0,0) -- FPS widget
+local lineSegment = pd.geometry.lineSegment.new(0, 0, 400, 240)
+local linearAnimator = gfx.animator.new(2000, lineSegment, pd.easingFunctions.outBounce)
+-- local ballSpriteLine = Ball(0, 0)
+
+local lineSegment = pd.geometry.lineSegment.new(0, 0, 200, 80)
+local arcSegment = pd.geometry.arc.new(200, 120, 40, 0, 180)
+local polygonSegment = pd.geometry.polygon.new(200, 160, 300, 90, 390, 230)
+
+local parts = { lineSegment, arcSegment, polygonSegment }
+local durations = { 3000, 1000, 2000 }
+local easingFunctions = { pd.easingFunctions.outQuart, pd.easingFunctions.inOutCubic, pd.easingFunctions.outBounce }
+
+local partsAnimator = gfx.animator.new(durations, parts, easingFunctions)
+
+local ballSpriteParts = Ball(0, 0)
+
+function pd.update()
+	-- if not myAnimator:ended() then
+	-- 	print(myAnimator:currentValue())
+	-- end
+
+	-- local cubicX = cubicAnimator:currentValue()
+	-- ballSpriteCubic:moveTo(cubicX, ballSpriteCubic.y)
+
+	-- local linearX = linearAnimator:currentValue()
+	-- ballSpriteLinear:moveTo(linearX, ballSpriteLinear.y)
+
+	-- ballSpriteLine:moveTo(linearAnimator:currentValue())
+
+	ballSpriteParts:moveTo(partsAnimator:currentValue())
+
+	gfx.sprite.update()
+	pd.timer.updateTimers()
+	pd.drawFPS(380, 10)
 end
