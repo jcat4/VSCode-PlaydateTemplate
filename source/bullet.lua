@@ -28,7 +28,14 @@ function Bullet:update()
 
     if length > 0 then
         for index, collisions in pairs(collisions) do
-
+            local collidedObject = collisions["other"]
+            if collidedObject:isa(Enemy) then
+                incrementScore()
+                collidedObject:remove()
+            end
         end
+        self:remove()
+    elseif actualX > 400 then
+        self:remove()
     end
 end
