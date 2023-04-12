@@ -20,7 +20,8 @@ end
 
 function spawnEnemy()
     local spawnPosition = math.random(10, 230)
-    Enemy(430, spawnPosition, 2)
+    local enemySpeed = math.random(1, 5)
+    Enemy(430, spawnPosition, enemySpeed)
 end
 
 function stopSpawner()
