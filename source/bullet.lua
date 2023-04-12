@@ -30,8 +30,9 @@ function Bullet:update()
         for index, collisions in pairs(collisions) do
             local collidedObject = collisions["other"]
             if collidedObject:isa(Enemy) then
-                incrementScore()
                 collidedObject:remove()
+                incrementScore()
+                setShakeAmount(5)
             end
         end
         self:remove()
